@@ -15,7 +15,7 @@ import loguru
 
 def scrape_data_point():
     """
-    Scrapes the main headline from The Daily Pennsylvanian home page.
+    Scrapes the four featured headlines from The Daily Pennsylvanian home page.
 
     Returns:
         str: The headline text if found, otherwise an empty string.
@@ -30,10 +30,20 @@ def scrape_data_point():
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
-        loguru.logger.info(f"Data point: {data_point}")
-        return data_point
+        featured_section = soup.find("div", class_="__flexy-box")
+        headlines = {}
+
+        if featured_section:
+            featured_articles = featured_section.find_all("div", class_="special-edition")
+            for idx, article in enumerate(featured_articles[:4], start=1):  # first (all) four articles
+                headline_tag = article.find("a", class_="frontpage-link standard-link")
+                if headline_tag:
+                    headlines[f"Featured_{idx}"] = headline_tag.text.strip()
+                else:
+                    headlines[f"Featured_{idx}"] = "Not Found"
+        
+        loguru.logger.info(f"Scraped headlines: {headlines}")
+        return headlines
 
 
 if __name__ == "__main__":
