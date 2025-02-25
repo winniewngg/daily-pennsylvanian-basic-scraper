@@ -18,13 +18,7 @@ The original scraper focused on a single headline from the homepage using frontp
 
 ## Scheduling
 
-The workflow schedule is configured with [cron syntax](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) to run:
-
-- Every day at 8PM UTC
-
-This once-daily scraping is a good rule-of-thumb, as it is generally respectful of the target website, as it does not contribute to any measurable burden to the site's resources.
-
-You can use [crontab.guru](https://crontab.guru/) to generate your own cron schedule.
+The workflow schedule is configured with [cron syntax](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) to run every day at 8pm UTC when it looks like this: "0 20 * * *". We've modified it to run twice a day, once at 7AM and once at 11PM UTC. The five fields in the cron field refer to minute, hour, day of month, month, and day of week, respectively, making it super customizable. 
 
 ## Python Libraries
 
